@@ -1,0 +1,18 @@
+{% extends "wiki/layout.html" %}
+
+{% block title %}
+    Edit
+{% endblock %}
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        <h3>Title: <span style="color:red"> {{title}} </span></h3>
+        <hr />
+        <h4>Content: </h4>
+        <textarea name="newcontent">{{ content }}</textarea>
+        <hr />
+        <br>
+        <input class="save btn btn-info" type="submit" value="Save"/>
+    </form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "wiki/layout.html" %}
+
+{% block title %}
+Add New page
+{% endblock %}
+
+{% block body %}
+  <form method="post">
+    {% csrf_token %}
+      <h3>Create new page:</h3>
+      <hr />
+
+    <div class="form-group row">
+        <lable class="col-sm-1 col-form-label">Title:</lable>
+          <div class="col-sm-6">
+            <input class="form-control" type="text" name="title" placeholder="Enter title of page">
+          </div> 
+    </div>     
+      <h5 class="pb-2">Content: </h5>
+      <textarea name="content"></textarea>
+      <hr />  
+      <br>
+        <input class="save btn btn-info" type="submit" value="Save"/>
+  </form>
+
+
+{% endblock %}

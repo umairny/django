@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'wiki/styles.css' %}" rel="stylesheet">
+    </head>
+
+    <body class='body'>
+        <div class="row col-lg-12 col-md-12">
+            <div class="sidebar col-lg-2 col-md-3 bg-dark text-white">
+                <h2 class="p-3">Wiki</h2>
+                <div class="nav flex-column mb-5">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    <a class="nav-link" href="{% url 'add_page' %}">Create New Page</a>
+                    <a class="nav-link" href="{% url 'random' %}">Random Page</a>
+                </div>
+ 
+                <form class="d-flex" action="{% url 'search' %}">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search">
+                    <button type="submit" name="Search" class="btn btn-outline-success">Search</button>
+                </form>
+
+                {% block nav %}
+                {% endblock %}
+            </div>
+            <div class="main col-lg-10 col-md-9">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+
+    </body>
+
+</html>

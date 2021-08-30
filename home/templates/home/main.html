@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+<head>
+    <title>{{ settings.APP_NAME }}</title>
+    <!-- edit samples/settings.py and add APP_NAME='DJ4E Samples' or similar
+        Also make sure that home/context_processors.py exists and is included
+        settings.py context processors as 'home.context_processors.settings' -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <link href="{% static 'home/styles.css' %}" rel="stylesheet">
+
+</head>
+<body class="bg-light">
+    <div class="container">
+            <h1 class="display-4">My Django Projects</h1>
+            <p class="lead">Here are some samples (Each will open in a new tab):</p>
+            <hr class="my-4">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="wiki" target="_blank">wiki</a> - A app that use Markdwon <i class="fa fa-language" aria-hidden="true"> language</i> to <strong> CUR </strong> opration.
+                <p style="color:gray;">In this app you can create, update and retrieve the pages. Also you can search the pages and randomly select the pages.</p></li>
+            </ul>
+    </div>
+</body>
+</html>

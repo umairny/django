@@ -1,0 +1,19 @@
+{% extends "wiki/layout.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+<h3>Page name: <span style="color:red">{{title}}</span> </h3>
+<hr />
+<div class="m-5">
+    <div class="p-2">
+    {{ page|safe }}
+    <div>
+    <br />
+    <hr />
+    <a class="btn btn-info" href="edit/{{title}}">Edit Page</a>
+</div>
+
+{% endblock %}

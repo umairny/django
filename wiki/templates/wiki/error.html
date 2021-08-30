@@ -1,0 +1,10 @@
+{% extends "wiki/layout.html" %}
+
+{% block title %}
+Error
+{% endblock %}
+
+{% block body %}
+<h1 class="error">{{message}}</h1>
+<a class="btn btn-danger" href={% url 'index' %}> Go back home </a>
+{% endblock %}
