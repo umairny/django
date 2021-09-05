@@ -11,7 +11,7 @@ urlpatterns = [
 
 
     path('wiki/', include('wiki.urls')),
-    path('social/', include('network.urls')),
+    path('network/', include('network.urls')),
 ]
 
 # Serve the static HTML

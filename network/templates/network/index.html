@@ -1,0 +1,59 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="content">
+    {% if user.is_authenticated %}
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+                {{ form.as_p }}
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Post">           
+        </div>
+
+    </form>
+
+    {% include "network/posts.html" %}
+
+   {% else %}
+    <div class="container">
+    <div>
+        <h1 class="display-3">Social Network example.</h1>
+        <p class="lead">Where you can post, comment, like and follow.</p>
+        <hr class="my-2">
+        <p>Login to continue...   user: new, pw: new123</p>
+    </div>
+
+    <div class="mac">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+           
+            <div class="form-group">
+                <label>Username: </label>
+                <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label>Password: </label>
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Login">
+
+            {% if message %}
+                <div class="alert alert-warning">{{ message }}</div>
+            {% endif %}
+
+            <div class="pt-2">
+                Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+            </div>
+
+        </form>
+    </div>
+    </div>
+
+    {% endif %}
+    <script src="{% static 'network/main.js' %}"></script>
+
+</div>
+{% endblock %}
+

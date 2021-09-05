@@ -1,0 +1,95 @@
+{% load static %}
+
+<div>
+    <div id="list_post">
+        {% for post in page_obj %}
+        <div class="card m-3">
+            <h5 class="card-header"> <a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h5>
+            <div class="card-body">
+                <h5 id="post-{{post.id}}" class="card-title">{{post.post}}</h5>
+
+                    <p id="reply-{{post.id}}" class="card-subtitle" 
+                    {% if post.reply %}
+                    style="color:gray; display: block;"
+                    {% else %}
+                    style="color:gray; display: none;"
+                    {% endif %}
+                    >
+                    comments: {{post.reply}}</p>
+                <textarea class="form-control" name="edit" id="edit-text-{{ post.id }}" rows="3"
+                    style="display: none;">{{post.post}}</textarea>
+                <button id="save{{post.id}}" class="btn btn-light" style="float: right; display: none;">Save</button>
+
+
+                <textarea class="form-control" name="comment" id="comment-{{ post.id }}" rows="1"
+                    style="display: none;"></textarea>
+                <button id="reply{{post.id}}" class="btn btn-light" style="float: right; display: none;">Reply</button>
+
+
+                <div class="my-2" style="display: block;">
+                    <button id="like{{post.id}}" onclick="like('{{post.id}}')" class="btn btn-light">
+                        {% if request.user in post.like.all %}
+                           <span id="liked{{ post.id }}">Liked</span>
+                        {% else %}
+                            <span id="liked{{ post.id }}">Like</span>
+                        {% endif %}
+                    </button>
+                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                    <span id="total_like{{ post.id }}">{{post.total_likes}}</span>
+
+
+                   
+                    {% if user == post.user %}
+                    <button id="edit" onclick="edit('{{ post.id }}')" class="btn btn-light ml-5">Edit</button>
+                    {% endif %}
+
+                    {% if not post.reply %}
+                        <button id="combtn{{post.id}}" onclick="comm('{{ post.id }}')" class="btn btn-light ml-5">Comment</button>
+                    {% endif %}
+
+                    <textarea class="form-control" name="comment" id="comment-{{ post.id }}" rows="1"
+                        style="display: none;"></textarea>
+                    <button id="reply{{post.id}}" class="btn btn-light" style="display: none;">Reply</button>
+
+                    <p style="float:right;">Posted: <small>{{post.pub_date}}</small></p>
+                </div>
+
+
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+    <hr />
+    <p>Pages: </p>
+    <nav aria-label="Page navigation example">
+
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; first</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            </li>
+            {% endif %}
+
+            {% for page in page_obj.paginator.page_range %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <script src="{% static 'network/main.js' %}"></script>
+
+</div>

@@ -1,0 +1,62 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+
+<div class="card" style="width: 35rem; margin: 20px auto;">
+    <div style="margin: auto;">
+
+        {% if profile.picture %}
+            <img class="card-img-top" style="width: 15rem; height: 15rem; border-radius: 100%;" src="{{ profile.picture.url }}" alt="{{ porfile.picture.url }}"
+            onclick="document.getElementById('overlay').style.display = 'block';" />
+        {% else %}
+        <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-top"
+            style="width: 15rem; height: 15rem; border-radius: 100%;" alt="Image">
+        {% endif %}
+
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title">User Name: <strong>{{ profile.user }}</strong></h5>
+        <p class="card-text">Full Name: <i>{{ profile.user.first_name }} {{ profile.user.last_name }}</i></p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Email: {{ profile.user.email }}</li>
+        <li class="list-group-item">Location: {{ profile.location }}</li>
+        <li class="list-group-item">Date of birth: {{ profile.birth_date }}</li>
+        <li class="list-group-item">Followers: {{ profile.follow.count }}</li>
+    </ul>
+    <div class="card-body">
+        {% if user == profile.user %}
+        <a href="{% url 'edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
+        {% else %}
+        {% if curuser in profile.follow.all %}
+        <a href="{% url 'follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
+        {% else %}
+        <a href="{% url 'follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{% for post in posts %}
+<div class="card m-3">
+    <h5 class="card-header">{{ post.user }}</a></h5>
+    <div class="card-body">
+        <h5 class="card-title">{{post.post}}</h5>
+        <p id="like"> <img src="{% static 'network/img/likedark.png' %}" style="width: 50px;" alt=""> {{post.like}}</p>
+        <p style="float:right;"><small>{{post.pub_date}}</small></p>
+        <a href="#" class="btn btn-primary">Comment</a>
+
+        {% if user == post.user %}
+        <a href="#" class="btn btn-primary" style="margin-left:150px;">Edit</a>
+        {% endif %}
+
+    </div>
+</div>
+
+
+{% endfor %}
+
+
+
+{% endblock body %}

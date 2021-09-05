@@ -1,0 +1,99 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+<h4>Posts of your followers:</h4>
+<div class="container">
+    {% if user.is_authenticated %}
+        {% for post in posts %}
+            <div class="card m-3">
+            <h5 class="card-header"> <a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h5>
+            <div class="card-body">
+                <h5 id="post-{{post.id}}" class="card-title">{{post.post}}</h5>
+
+                    <p id="reply-{{post.id}}" class="card-subtitle" 
+                    {% if post.reply %}
+                        style="color:gray; display: block;"
+                    {% else %}
+                        style="color:gray; display: none;"
+                    {% endif %}
+                    >
+                    comments: {{post.reply}}</p>
+
+
+
+
+                <textarea class="form-control" name="edit" id="edit-text-{{ post.id }}" rows="3"
+                    style="display: none;">{{post.post}}</textarea>
+                <button id="save{{post.id}}" class="btn btn-primary" style="float: right; display: none;">Save</button>
+
+
+                <textarea class="form-control" name="comment" id="comment-{{ post.id }}" rows="1"
+                    style="display: none;"></textarea>
+                <button id="reply{{post.id}}" class="btn btn-primary" style="float: right; display: none;">Reply</button>
+
+
+                <div class="my-2" style="display: block;">
+                    <button id="like{{post.id}}" onclick="like('{{post.id}}')" class="btn btn-info">
+                        {% if request.user in post.like.all %}
+                        <span id="liked{{ post.id }}">Unlike</span>
+                        {% else %}
+                        <span id="liked{{ post.id }}">Like</span>
+                        {% endif %}
+                    </button>
+                    <span class="ml-3"><img src="{% static 'network/img/likedark.png' %}" style="width: 50px;" alt="">
+                    </span><span id="total_like{{ post.id }}">{{post.total_likes}}</span>
+
+                    {% if not post.reply %}
+                        <button id="combtn{{post.id}}" onclick="comm('{{ post.id }}')" class="btn btn-primary ml-5">Comment</button>
+                    {% endif %}
+
+                    
+                    {% if user == post.user %}
+                    <button id="edit" onclick="edit('{{ post.id }}')" class="btn btn-primary ml-5">Edit</button>
+                    {% endif %}
+                    <p style="float:right;">Posted: <small>{{post.pub_date}}</small></p>
+                </div>
+
+
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
+    <nav aria-label="Page navigation example">
+
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; first</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            </li>
+            {% endif %}
+
+            {% for page in page_obj.paginator.page_range %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    <script src="{% static 'network/main.js' %}"></script>
+
+</div>
+
+
+
+{% endblock body %}
