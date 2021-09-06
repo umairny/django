@@ -18,11 +18,10 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['location','birth_date', 'picture']
         widgets = {
-            'location' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':'your location'}),
-            'birth_date': forms.DateInput(format=('%m-%d-%Y'), 
-                                             attrs={'class': 'form-control', 
+            'location' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':'your location', 'type':'text'}),
+            'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type':'date', 
                                             'placeholder':'Select a date'}),
-            'picture': FileInput(attrs={'class': 'custom-file'}),
+            'picture': FileInput(attrs={'class': 'form-control-file'}),
         }
 
 class PostForm(forms.ModelForm):

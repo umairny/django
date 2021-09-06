@@ -4,7 +4,9 @@ from . import util
 from random import randint
 import re
 
+
 from markdown2 import Markdown, markdown
+from django.urls import reverse_lazy
 
 markdowner = Markdown()
 
@@ -30,6 +32,7 @@ def search(request):
     searchlist = []
 
     if query:
+
         if query in entry:
             page = util.get_entry(query)
             page_converted = markdowner.convert(page)
@@ -37,10 +40,17 @@ def search(request):
                 'page': page_converted,
                 'title': query,
                 }
-            return render(request, "wiki/entry.html", context)
-        for i in entries:      
+            return render(request, "wiki/sing_search.html", context)
+
+        for i in entry:
+            if re.search(query, i):
+                searchlist.append(i)
+                print(searchlist)
+
+        for i in entries:
             if re.search(query, i.lower()):
                 searchlist.append(i)
+                print(searchlist)
                 return render(request, "wiki/search.html", {
                     "entries": searchlist
                 })
@@ -66,9 +76,10 @@ def entry(request, title):
 #Creat New page entry
 def add_page(request):
     entries = util.list_entries()
+    title = request.POST.get("title")
+    success_url = reverse_lazy('wiki:entry', kwargs={'title': title})
+
     if request.method == 'POST':
-        title = request.POST.get("title")
-        #content = request.POST.get("content")
         if not title:
             return render(request, "wiki/error.html", {"message": "Please enter the title"})
         elif title in entries:
@@ -76,13 +87,14 @@ def add_page(request):
         else:
             util.save_entry(title, bytes(request.POST['content'], 'utf8'))
 
-            return redirect(entry, title=title)
-            #return render(request, "wiki/entry.html", context)
+            return redirect(success_url)
     else:
         return render(request, "wiki/add_page.html")
 
 def edit(request, title):
     entries = util.list_entries()
+    success_url = reverse_lazy('wiki:entry', kwargs={'title': title})
+
     if request.method == 'GET':
         page = util.get_entry(title)
         context = {
@@ -91,11 +103,8 @@ def edit(request, title):
         }
         return render(request, "wiki/edit.html", context)
     elif request.method == 'POST':
-        #newcontent = request.POST.get('newcontent')
         util.save_entry(title, bytes(request.POST['newcontent'], 'utf8'))
-        
-        return redirect(entry, title=title)
-        #return render(request, "wiki/index.html", context)
+        return redirect(success_url)
 
 def random(request):
     entries = util.list_entries()

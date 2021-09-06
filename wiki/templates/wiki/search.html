@@ -7,9 +7,9 @@
 {% block body %}
 <h1>Search results</h1>
 
-<ul>
+<ul style="list-style: none;">
     {% for entry in entries %}
-        <li><a href="{% url 'entry' entry %}">{{ entry }}</a></li>
+        <li><a href="{% url 'wiki:entry' entry %}">{{ entry }}</a></li>
     {% endfor %}
 </ul>
 

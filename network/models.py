@@ -33,7 +33,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
-    picture = models.ImageField(upload_to="images/", null=True, blank=True)
+    picture = models.ImageField(upload_to="site/images/", null=True, blank=True)
 
     follow = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
         

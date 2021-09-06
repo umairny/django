@@ -16,12 +16,12 @@
             <div class="sidebar col-lg-2 col-md-3 bg-dark text-white">
                 <h2 class="p-3">Wiki</h2>
                 <div class="nav flex-column mb-5">
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-                    <a class="nav-link" href="{% url 'add_page' %}">Create New Page</a>
-                    <a class="nav-link" href="{% url 'random' %}">Random Page</a>
+                    <a class="nav-link" href="{% url 'wiki:index' %}">Home</a>
+                    <a class="nav-link" href="{% url 'wiki:add_page' %}">Create New Page</a>
+                    <a class="nav-link" href="{% url 'wiki:random' %}">Random Page</a>
                 </div>
  
-                <form class="d-flex" action="{% url 'search' %}">
+                <form class="d-flex" action="{% url 'wiki:search' %}">
                     <input class="form-control me-2" type="search" name="q" placeholder="Search">
                     <button type="submit" name="Search" class="btn btn-outline-success">Search</button>
                 </form>

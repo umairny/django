@@ -18,14 +18,14 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="{% url 'index' %}">My Social Network</a>
+            <a class="navbar-brand" href="{% url 'net_index' %}">My Social Network</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             {% if user.is_authenticated %}
                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' user.id %}">Hi, <strong>{{ user.username }}</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                        <a class="nav-link" href="{% url 'net_index' %}">All Posts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'following' %}">Following</a>

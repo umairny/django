@@ -2,11 +2,13 @@
 {% load static %}
 
 {% block body %}
-<h6 class="text-warning">If you have any of these settings already! This change will effect in your profile.</h6>
+<div class="row">
+<div class="alert alert-warning col-12 mt-2">If you have any of these settings already! This change will effect in your profile.</div>
 <form method="POST" enctype="multipart/form-data">
     {{ userform.as_p }}
     {{ proform.as_p }}
-    <input class="btn btn-primary" type="submit" value="Save">
+    <input class="btn btn-info" type="submit" value="Save">
+    <a class="btn btn-light" href="{% url 'profile' user.id %}">Cancel</a>
 </form>
-
+</div>
 {% endblock body %}

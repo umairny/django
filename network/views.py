@@ -23,7 +23,7 @@ def index(request):
             # logged in user is available on a view func's `request` instance
             newobj.user = request.user
             newobj.save()  # safe to save w/ user in tow
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("net_index"))
     #Show the post form to user
     form = PostForm()
     #All posts via revers order
@@ -34,7 +34,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "network/index.html", {
+    return render(request, "network/net_index.html", {
         "page_obj":page_obj,
         "form": form,
     })
@@ -45,11 +45,17 @@ def index(request):
 def profile(request, user_id):
     user = request.user
     curuser = get_object_or_404(Profile, user=user)
-    posts = Posts.objects.filter(user=user_id)
     profile = get_object_or_404(Profile, user=user_id)
+    posts = Posts.objects.filter(user=user_id)
+
+    #paginator 
+    paginator = Paginator(posts, 10) # Show 10 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/profile.html", {
         "profile": profile,
-        "posts": posts,
+        "page_obj": page_obj,
         "curuser": curuser
     })  
 
@@ -62,11 +68,21 @@ def following(request):
     user = Profile.objects.get(pk=user.id)
     
     #Check if the user follow you 
-    following = user.follow.all().values_list('id', flat=True)
+    following = user.follow.all().values_list('user', flat=True)
     posts = Posts.objects.filter(user__in=following).order_by('-pub_date')
 
+    #follower details.
+    follow = user.follow.all()
+
+    #paginator 
+    paginator = Paginator(posts, 10) # Show 10 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
     return render(request, "network/following.html", {
-        "posts": posts,
+        "follow": follow,
+        "page_obj": page_obj,
     })  
 
 
@@ -122,7 +138,7 @@ def posts(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "network/index.html", {
+    return render(request, "network/net_index.html", {
         "page_obj":page_obj,
     })
 
@@ -185,7 +201,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("net_index"))
         else:
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
@@ -195,7 +211,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("net_index"))
 
 
 def register(request):
@@ -225,7 +241,7 @@ def register(request):
         profile = Profile(user=user)
         profile.save()
 
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("net_index"))
     else:
         return render(request, "network/register.html", {
         })
