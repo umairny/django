@@ -3,11 +3,11 @@
 {% block body %}
 <div class="container">
 <h4 class="alert alert-info mt-2">Posts of your followers:</h4>
-    <div class="alert alert-success" >You have total <i class="fa fa-users" aria-hidden="true"></i> {{ follow.count }} follower <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>  
+    <h5>You have <i class="fa fa-users" aria-hidden="true"></i><strong> {{ follow.count }} follower </strong> <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>  
     {% for follower in follow %}
     <span style="color:green;"> <i class="fa fa-user" aria-hidden="true"></i> {{ follower.user }}, </span>
     {% endfor %}
-    </div>
+    </h5>
     {% include "network/posts.html" %}
 </div>
 

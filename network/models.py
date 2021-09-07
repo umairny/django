@@ -33,7 +33,11 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
-    picture = models.ImageField(upload_to="site/images/", null=True, blank=True)
+    # Picture
+    picture = models.BinaryField(null=True, editable=True)
+    content_type = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
+    
+    #picture = models.ImageField(upload_to="site/images/", null=True, blank=True)
 
     follow = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
         

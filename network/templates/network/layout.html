@@ -18,27 +18,27 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="{% url 'net_index' %}">My Social Network</a>
+            <a class="navbar-brand" href="{% url 'network:index' %}">My Social Network</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             {% if user.is_authenticated %}
                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' user.id %}">Hi, <strong>{{ user.username }}</strong></a>
+                        <a class="nav-link" href="{% url 'network:profile' user.id %}">Hi, <strong>{{ user.username }}</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'net_index' %}">All Posts</a>
+                        <a class="nav-link" href="{% url 'network:index' %}">All Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'following' %}">Following</a>
+                        <a class="nav-link" href="{% url 'network:following' %}">Following</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        <a class="nav-link" href="{% url 'network:logout' %}">Log Out</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        <a class="nav-link" href="{% url 'network:login' %}">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="nav-link" href="{% url 'network:register' %}">Register</a>
                     </li>
             {% endif %}
         </div>

@@ -1,20 +1,24 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.core import serializers
-from itertools import chain
+from django.views import View
 from .models import *
 from .forms import *
 
+
+
 @csrf_exempt
 def index(request):
+    success_url = reverse_lazy('network:index')
     if request.method == "POST":
         form = PostForm(request.POST)
         # Attempt to create new user
@@ -23,7 +27,7 @@ def index(request):
             # logged in user is available on a view func's `request` instance
             newobj.user = request.user
             newobj.save()  # safe to save w/ user in tow
-            return HttpResponseRedirect(reverse("net_index"))
+            return HttpResponseRedirect(success_url)
     #Show the post form to user
     form = PostForm()
     #All posts via revers order
@@ -34,7 +38,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "network/net_index.html", {
+    return render(request, "network/index.html", {
         "page_obj":page_obj,
         "form": form,
     })
@@ -90,31 +94,58 @@ def following(request):
 @login_required
 @csrf_exempt
 def edit_profile(request, user_id):
+    success_url = reverse_lazy('network:profile', kwargs={'user_id':user_id})
     #if user edit the form via POST
     if request.method == "POST":
-        #Profile model form instance
-        instance = get_object_or_404(Profile, pk=user_id)
-        proform = ProfileForm(data=request.POST, files=request.FILES, instance=instance)
-        if proform.is_valid():
-            instance.save()
-        #User model form instanc
-        userinstance = get_object_or_404(User, id=user_id)
-        userform = UserForm(data=request.POST or None, instance=userinstance)
-        if userform.is_valid():
-            userform.save()
+        proform = ProfileForm(request.POST, request.FILES or None)
+        userform = UserForm(request.POST)
+        if not proform.is_valid():
+            ctx = {'proform': proform, 'userform': userform}
+            return render(request, success_url, ctx)
+        
+        # Add owner to the model before saving
+        proform = proform.save(commit=False)
+        proform.user = request.user
+        proform.save()
+        return HttpResponseRedirect(success_url)
 
-            return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     #Show the user porfile form for edit
     userform = UserForm()
     proform = ProfileForm()
     return render(request, "network/edit_profile.html", {
-        "proform": proform,
-        "userform": userform
-    })  
+            "proform": proform,
+            "userform": userform
+        })  
+"""
+@csrf_exempt
+class edit_profile(LoginRequiredMixin, View):
+    template_name = 'network/edit_profile.html'
+    success_url = reverse_lazy('network:profile')
+
+    def get(self, request, pk=None):
+        form = ProfileForm()
+        ctx = {'form': form}
+        return render(request, self.template_name, ctx)
+
+    def post(self, request, pk=None):
+        form = ProfileForm(request.POST, request.FILES or None)
+
+        if not form.is_valid():
+            ctx = {'form': form}
+            return render(request, self.template_name, ctx)
+
+        # Add owner to the model before saving
+        pic = form.save(commit=False)
+        pic.owner = self.request.user
+        pic.save()
+        return redirect(self.success_url)
+"""
 
 #follow and unfollow button
 @csrf_exempt
 def follow(request, user_id):
+    success_url = reverse_lazy('network:profile', kwargs={'user_id': user_id})
+
     #User current
     user = request.user
     oneprofile = user.id
@@ -128,7 +159,7 @@ def follow(request, user_id):
     else:
         profile.follow.add(oneprofile)
     
-    return HttpResponseRedirect(reverse("profile", args=[str(user_id)]))
+    return HttpResponseRedirect(success_url)
 
 
 def posts(request):
@@ -138,7 +169,7 @@ def posts(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "network/net_index.html", {
+    return render(request, "network/index.html", {
         "page_obj":page_obj,
     })
 
@@ -189,10 +220,11 @@ def like(request, post_id):
         
         return JsonResponse({'liked': liked,'total_like': post.like.count(), "status": 201})
 
-
+@csrf_exempt
 def login_view(request):
-    if request.method == "POST":
+    success_url = reverse_lazy('network:index')
 
+    if request.method == "POST":
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
@@ -201,7 +233,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("net_index"))
+            return HttpResponseRedirect(success_url)
         else:
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
@@ -211,10 +243,12 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("net_index"))
+    success_url = reverse_lazy('network:index')
+    return HttpResponseRedirect(success_url)
 
 
 def register(request):
+    success_url = reverse_lazy('network:index')
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -241,7 +275,15 @@ def register(request):
         profile = Profile(user=user)
         profile.save()
 
-        return HttpResponseRedirect(reverse("net_index"))
+        return HttpResponseRedirect(success_url)
     else:
         return render(request, "network/register.html", {
         })
+
+def stream_file(request, pk):
+    prof = get_object_or_404(Profile, id=pk)
+    response = HttpResponse()
+    response['Content-Type'] = prof.content_type
+    response['Content-Length'] = len(prof.picture)
+    response.write(prof.picture)
+    return response

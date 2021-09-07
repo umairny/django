@@ -4,7 +4,7 @@
     <div id="list_post">
         {% for post in page_obj %}
         <div class="card m-3">
-            <h5 class="card-header"> <a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h5>
+            <h5 class="card-header"> <a href="{% url 'network:profile' post.user.id %}">{{ post.user }}</a></h5>
             <div class="card-body">
                 <h5 id="post-{{post.id}}" class="card-title">{{post.post}}</h5>
 
@@ -16,14 +16,13 @@
                     {% endif %}
                     >
                     comments: {{post.reply}}</p>
-                <textarea class="form-control" name="edit" id="edit-text-{{ post.id }}" rows="3"
+
+                <textarea class="form-control" name="edit" id="edit-text-{{ post.id }}" rows="2"
                     style="display: none;">{{post.post}}</textarea>
-                <button id="save{{post.id}}" class="btn btn-light" style="float: right; display: none;">Save</button>
 
 
                 <textarea class="form-control" name="comment" id="comment-{{ post.id }}" rows="1"
                     style="display: none;"></textarea>
-                <button id="reply{{post.id}}" class="btn btn-light" style="float: right; display: none;">Reply</button>
 
 
                 <div class="my-2" style="display: block;">
@@ -40,11 +39,13 @@
 
                    
                     {% if user == post.user %}
-                    <button id="edit" onclick="edit('{{ post.id }}')" class="btn btn-light ml-5">Edit</button>
+                    <button id="edit-btn-{{ post.id }}" onclick="edit('{{ post.id }}')" class="btn btn-light">Edit</button>
+                    <button id="save{{post.id}}" class="btn btn-light" style="display: none;">Save Edit</button>
                     {% endif %}
 
                     {% if not post.reply %}
                         <button id="combtn{{post.id}}" onclick="comm('{{ post.id }}')" class="btn btn-light ml-5">Comment</button>
+                        <button id="reply{{post.id}}" class="btn btn-light" style="display: none;">Reply Comment</button>
                     {% endif %}
 
                     <textarea class="form-control" name="comment" id="comment-{{ post.id }}" rows="1"

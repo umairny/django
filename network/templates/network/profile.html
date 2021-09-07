@@ -1,17 +1,28 @@
 {% extends "network/layout.html" %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
 {% load static %}
 {% block body %}
 
 <div class="card" style="width: 35rem; margin: 20px auto;">
     <div style="margin: auto;">
-
+<!--
         {% if profile.picture %}
-            <img class="card-img-top" style="width: 15rem; height: 15rem; border-radius: 100%;" src="{{ profile.picture.url }}" alt="{{ porfile.picture.url }}"
+        <img class="card-img-top" style="width: 15rem; height: 15rem; border-radius: 100%;" src="{{ profile.picture.url }}" alt="{{ porfile.picture.url }}"
             onclick="document.getElementById('overlay').style.display = 'block';" />
         {% else %}
         <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-top"
             style="width: 15rem; height: 15rem; border-radius: 100%;" alt="Image">
         {% endif %}
+-->
+    {% if profile.content_type %}
+    <div id="overlay" class="overlay" style="text-align: center;" onclick="document.getElementById('overlay').style.display = 'none';" >
+        <img style="width:90%;margin-top: 50px; border:3px solid black;" src="{% url 'network:prof_picture' profile.id %}">
+    </div>
+    {% else %}
+    <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-top"
+            style="width: 15rem; height: 15rem; border-radius: 100%;" alt="Image">
+    {% endif %}
+
 
     </div>
 
@@ -27,19 +38,21 @@
     </ul>
     <div class="card-body">
         {% if user == profile.user %}
-        <a href="{% url 'edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
+        <a href="{% url 'network:edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
         {% else %}
         {% if curuser in profile.follow.all %}
-        <a href="{% url 'follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
+        <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
         {% else %}
-        <a href="{% url 'follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
+        <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
         {% endif %}
         {% endif %}
     </div>
 </div>
 
 <div>
-    <h5 class="alert alert-info">{{ profile.user }} user posts only.</h5>
+    <hr />
+    <h5> <i class="fa fa-user-circle" aria-hidden="true"></i><strong> {{ profile.user }}&apos;s </strong> all posts.</h5>
+    
     {% include "network/posts.html" %}
 </div>
 {% endblock body %}

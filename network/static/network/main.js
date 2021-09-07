@@ -4,12 +4,13 @@ function comm(id) {
         const comment = document.querySelector('#comment-' + id)
         const reply = document.querySelector('#reply' + id)
         const combtn = document.querySelector('#combtn' + id)
-
+        
+        combtn.style.display = 'none';
         comment.style.display = 'block';
-        reply.style.display = 'block';
+        reply.style.display = 'inline-block';
 
         reply.addEventListener('click', () => {
-            fetch('network/comment/' + id, {
+            fetch('comment/' + id, {
                 method: 'PUT',
                 body: JSON.stringify({
                     post: comment.value
@@ -31,7 +32,7 @@ function like(id) {
     const total_like = document.querySelector(`#total_like${id}`)
     const liked = document.querySelector(`#liked${id}`)
 
-    fetch('network/like/'+id, {
+    fetch('like/'+id, {
         method: 'PUT',
         body: JSON.stringify({liked: "Like", post_id: id})
         })
@@ -58,13 +59,15 @@ function edit(id) {
         const post = document.querySelector('#post-' + id)
         const edit = document.querySelector('#edit-text-' + id)
         const save = document.querySelector('#save' + id)
-        
+        const editBtn = document.querySelector('#edit-btn-' + id)
+
+        editBtn.style.display = 'none';
         post.style.display = 'none';
         edit.style.display = 'block';
-        save.style.display = 'block';
+        save.style.display = 'inline-block';
 
         save.addEventListener('click', () => {
-            fetch('network/edit/' + id, {
+            fetch('edit/' + id, {
                 method: 'PUT',
                 body: JSON.stringify({
                     post: edit.value
@@ -74,6 +77,7 @@ function edit(id) {
             save.style.display = 'none';
 
             post.style.display = 'block';
+            editBtn.style.display = 'inline-block';
             post.innerHTML = edit.value;
         })
            //alert('hello' + id)
