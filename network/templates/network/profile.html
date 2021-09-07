@@ -3,49 +3,37 @@
 {% load static %}
 {% block body %}
 
-<div class="card" style="width: 35rem; margin: 20px auto;">
-    <div style="margin: auto;">
-<!--
-        {% if profile.picture %}
-        <img class="card-img-top" style="width: 15rem; height: 15rem; border-radius: 100%;" src="{{ profile.picture.url }}" alt="{{ porfile.picture.url }}"
-            onclick="document.getElementById('overlay').style.display = 'block';" />
-        {% else %}
-        <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-top"
-            style="width: 15rem; height: 15rem; border-radius: 100%;" alt="Image">
-        {% endif %}
--->
+<div class="row mt-3" >
+    <div class="col-md-4 col-xs-12">
     {% if profile.content_type %}
-    <div id="overlay" class="overlay" style="text-align: center;" onclick="document.getElementById('overlay').style.display = 'none';" >
-        <img style="width:90%;margin-top: 50px; border:3px solid black;" src="{% url 'network:prof_picture' profile.id %}">
-    </div>
+        <img class="card-img-top" style="width:100%; border:3px solid black;" src="{% url 'network:prof_picture' profile.id %}">
     {% else %}
-    <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-top"
-            style="width: 15rem; height: 15rem; border-radius: 100%;" alt="Image">
+        <img src="{% static 'network/img/IMG.jpg' %}" class="card-img-left"
+                style="width:100%; border:3px solid black;" alt="Image">
     {% endif %}
-
-
     </div>
-
-    <div class="card-body">
-        <h5 class="card-title">User Name: <strong>{{ profile.user }}</strong></h5>
-        <p class="card-text">Full Name: <i>{{ profile.user.first_name }} {{ profile.user.last_name }}</i></p>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Email: {{ profile.user.email }}</li>
-        <li class="list-group-item">Location: {{ profile.location }}</li>
-        <li class="list-group-item">Date of birth: {{ profile.birth_date }}</li>
-        <li class="list-group-item">Followers: {{ profile.follow.count }}</li>
-    </ul>
-    <div class="card-body">
-        {% if user == profile.user %}
-        <a href="{% url 'network:edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
-        {% else %}
-        {% if curuser in profile.follow.all %}
-        <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
-        {% else %}
-        <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
-        {% endif %}
-        {% endif %}
+    <div class="col-md-8 col-xs-12">
+        <div class="card-body">
+            <h5 class="card-title">User Name: <strong>{{ profile.user }}</strong></h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Full Name: {{ profile.full_name }}</li>
+            <li class="list-group-item">Email: {{ profile.user.email }}</li>
+            <li class="list-group-item">Location: {{ profile.location }}</li>
+            <li class="list-group-item">Date of birth: {{ profile.birth_date }}</li>
+            <li class="list-group-item">Followers: {{ profile.follow.count }}</li>
+        </ul>
+        <div class="card-body">
+            {% if user == profile.user %}
+            <a href="{% url 'network:edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
+            {% else %}
+            {% if curuser in profile.follow.all %}
+            <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
+            {% else %}
+            <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
+            {% endif %}
+            {% endif %}
+        </div>
     </div>
 </div>
 

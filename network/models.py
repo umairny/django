@@ -30,6 +30,7 @@ class Posts(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL , on_delete=models.CASCADE, related_name="profile_user")
+    full_name = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 

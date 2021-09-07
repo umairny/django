@@ -1,9 +1,8 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -13,7 +12,6 @@ from django.core import serializers
 from django.views import View
 from .models import *
 from .forms import *
-
 
 
 @csrf_exempt
@@ -95,51 +93,26 @@ def following(request):
 @csrf_exempt
 def edit_profile(request, user_id):
     success_url = reverse_lazy('network:profile', kwargs={'user_id':user_id})
-    #if user edit the form via POST
-    if request.method == "POST":
-        proform = ProfileForm(request.POST, request.FILES or None)
-        userform = UserForm(request.POST)
-        if not proform.is_valid():
-            ctx = {'proform': proform, 'userform': userform}
-            return render(request, success_url, ctx)
-        
-        # Add owner to the model before saving
-        proform = proform.save(commit=False)
-        proform.user = request.user
-        proform.save()
-        return HttpResponseRedirect(success_url)
 
-    #Show the user porfile form for edit
-    userform = UserForm()
-    proform = ProfileForm()
-    return render(request, "network/edit_profile.html", {
-            "proform": proform,
-            "userform": userform
-        })  
-"""
-@csrf_exempt
-class edit_profile(LoginRequiredMixin, View):
-    template_name = 'network/edit_profile.html'
-    success_url = reverse_lazy('network:profile')
-
-    def get(self, request, pk=None):
-        form = ProfileForm()
+    if request.method == "GET":
+        profile = get_object_or_404(Profile, user=request.user)
+        form = ProfileForm(instance=profile)
         ctx = {'form': form}
-        return render(request, self.template_name, ctx)
+        return render(request, "network/edit_profile.html", ctx)
 
-    def post(self, request, pk=None):
-        form = ProfileForm(request.POST, request.FILES or None)
+    if request.method == "POST":
+        profile = get_object_or_404(Profile, user=request.user)
+        form = ProfileForm(request.POST, request.FILES or None, instance=profile)
 
         if not form.is_valid():
             ctx = {'form': form}
-            return render(request, self.template_name, ctx)
+            return render(request, "network/edit_profile.html", ctx)
 
-        # Add owner to the model before saving
-        pic = form.save(commit=False)
-        pic.owner = self.request.user
-        pic.save()
-        return redirect(self.success_url)
-"""
+        profile = form.save(commit=False)
+        profile.save()
+
+        return redirect(success_url)
+
 
 #follow and unfollow button
 @csrf_exempt
