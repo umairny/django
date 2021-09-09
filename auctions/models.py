@@ -61,7 +61,6 @@ class Bid(models.Model):
             if self.bid <= self.list.cur_price():
                 raise ValidationError({'bid': ('Warning!! Your bidding value should be higher than the current price or bid of the item!')})
 
-
     def __str__(self):
         return f"{self.id} {self.bid} {self.list} {self.user} {self.updated}"
 

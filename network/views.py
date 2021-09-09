@@ -13,7 +13,7 @@ from django.views import View
 from .models import *
 from .forms import *
 
-
+@csrf_exempt
 def index(request):
     success_url = reverse_lazy('network:index')
     if request.method == "POST":
@@ -41,7 +41,6 @@ def index(request):
     })
 
 #Show the user profile
-@login_required
 def profile(request, user_id):
     user = request.user
     curuser = get_object_or_404(Profile, user=user)
@@ -61,6 +60,7 @@ def profile(request, user_id):
 
 #Show the users who currently follows you
 @login_required
+@csrf_exempt
 def following(request):
     user = request.user
     #get the porfile user via user id
@@ -87,6 +87,7 @@ def following(request):
 
 # To complete the user its profile if user want
 @login_required
+@csrf_exempt
 def edit_profile(request, user_id):
     success_url = reverse_lazy('network:profile', kwargs={'user_id':user_id})
 

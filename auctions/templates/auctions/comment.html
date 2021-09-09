@@ -1,41 +1,44 @@
 {% extends "auctions/layout.html" %}
 
-{% block body %}
+{% block content %}
+<a style="text-decoration: none; color:black;" href="{% url 'auctions:listing' list.id %}">
 <div class="card mb-3" style="max-width: 100%;">
     <div class="row no-gutters">
-        <div class="col-md-4">
-           <img src="{{ list.new_Img.url }}" class="card-img-top" alt="Image">
+        <div class="col-md-2">
+        {% if list.content_type %}
+                <img class="card-img-top" src="{% url 'auctions:list_picture' list.id %}">
+        {% endif %}
         </div>
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card-body">
-                <h3 class="card-title"> {{list.title}} </h3>
-                <p class="card-text"><h5>Details:</h5> {{list.details}} </p>
-                <h6>Catagory: {{list.category}} </h6>
+                <h4 class="card-title"> {{list.title}} </h4>
+                <p class="card-text"><small>Details:</small> {{list.details}} </p>
+                <p><small>Catagory: </small> {{list.category}} </p>
             </div>
         </div>
     </div>
 </div>    
+</a>
         <form method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 {% csrf_token %}
                     {{ comform.as_p }}
             </div>
-            <input class="btn btn-primary" type="submit" value="Your comment">
+            <input class="btn btn-info" type="submit" value="Comment">
         </form>
-    <hr>
-    <h3 style="color:green;">Comments</h3>
+    
+    <h4 class="mt-4">Comments:</h4>
+    <hr />
     <div class="comment">
     {% for comment in list.comments.all %}
         <div class="row each-comment">
             <div class="col">
-                <h6><strong style="color: black;">{{ comment.user }}</strong> commented:</h6>
-                <p> {{ comment.comment }}</p>
-                <p class="small" style="color:gray;"> {{ comment.com_time }} </p>
+                <p><strong style="color: gray;">{{ comment.user }}</strong> commented: <span class="small" style="color:gray; float: right;"> {{ comment.com_time }} </span></p>
+                <h5> {{ comment.comment }}</h5>
+                <hr />
             </div>
         </div>
     {% endfor %}
-
-
     </div>
 
 {% endblock %}

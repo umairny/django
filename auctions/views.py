@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.db.models.expressions import F
 from django.db.models.fields import DecimalField, FloatField, IntegerField
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.http import response
+from django.http import request, response
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from .forms import *
@@ -25,7 +25,7 @@ def index(request):
     return render(request, "auctions/index.html", {
         "listing": listing,
         "username": username,
-        'title': "Active Listings",
+        'title': "Active items",
     })
 
 @login_required
@@ -74,7 +74,6 @@ def listing(request, list_id):
             
         else:
             return render(request, "auctions/listing.html", {
-                "message": "Invalid bid.",
                 'list': list,
                 'form': bidform
             })
@@ -91,6 +90,7 @@ def listing(request, list_id):
 
 @login_required
 def comment(request, list_id):
+    success_url = reverse_lazy('auctions:comment', kwargs={'list_id':list_id})
     #get the list item    
     list = Listing.objects.get(pk=list_id)    
     #Get the comment value from the models from current list
@@ -111,7 +111,7 @@ def comment(request, list_id):
             'list': list,
             'comform': comform
         })
-    return HttpResponseRedirect(reverse("comment", args=(list_id,)))
+    return HttpResponseRedirect(success_url)
 
 @login_required
 def watchlist(request, list_id):

@@ -1,21 +1,18 @@
 {% extends 'base_template.html' %}
 {% load static %}
+{% block title %}Auction{% endblock  %}
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="{% url 'auctions:index' %}">Auctions Bidding</a>
+            <a class="navbar-brand" href="{% url 'auctions:index' %}">Auction &amp; Bid</a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
+                <a class="nav-link" href="{% url 'auctions:index' %}">Active items</a>
             </li>
             {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="#">Hi, <strong>{{ user.username }}</strong></a>
-            </li>
-
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'auctions:watchlistitems' %}">Watchlist <sup> {{ wl }}</sup> </a>
             </li>
@@ -23,7 +20,7 @@
                 <a class="nav-link" href="{% url 'auctions:categories' %}">Category</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'auctions:create' %}">Create listing</a>
+                <a class="nav-link" href="{% url 'auctions:create' %}">Create new</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}?next={% url 'auctions:index' %}">Log Out</a>
@@ -34,5 +31,8 @@
             </li>
             {% endif %}
         </ul>
+        {% if user.is_authenticated %}
+            <a class="navbar-brand" href="#">Hi, <strong>{{ user.username }}</strong></a>
+        {% endif %}
     </nav>
     {% endblock %}

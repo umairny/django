@@ -7,7 +7,7 @@
         <h1 class="display-5">Login</h1>
         <hr class="my-2">
         <p>Login to continue...  </p>
-        <h6 style="text-align:center;" > user: mike, pw: mike123 or user: harry, pw: harry123</h6>
+        <h6 style="text-align:center;" > user: mike, pw: mike123 | user: harry, pw: harry123 | user: emma, pw: emma123</h6>
     </div>
 
     <div class="mac">
@@ -16,7 +16,7 @@
 
                 {% for field in form %}
                     <div class="form-group">
-                        <label for="{{ field.id_for_label }}" >{{ field.html_name.upper }}</lable>
+                        <label for="{{ field.id_for_label }}" >{{ field.html_name.upper }}</label>
                         <input class="form-control mt-1" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="{{ field.html_name }}" placeholder="{{ field.html_name }}" required /> 
                         {{ field.errors }}
                     </div>

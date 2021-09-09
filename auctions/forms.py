@@ -56,7 +56,7 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ('comment',)
         widgets = {
-            'comment': Textarea(attrs={'class': 'form-control',
+            'comment': Textarea(attrs={'class': 'form-control', 'rows':'2',
             'placeholder': 'comment here'})
         }
 
@@ -64,9 +64,5 @@ class BidForm(ModelForm):
     class Meta:
         model = Bid
         fields = ['bid']
-        widgets = {
-            'bid': NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Your Bid here.'})
-        }
+
 

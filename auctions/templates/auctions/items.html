@@ -1,0 +1,57 @@
+{% for list in listing %}
+<a style="text-decoration: none; color:black;" href="{% url 'auctions:listing' list.id %}">
+    <div class="card" style="width: 20rem;">
+        {% if list.content_type %}
+                <img class="card-img-top" src="{% url 'auctions:list_picture' list.id %}">
+        {% endif %}
+
+    <div class="card-body">
+             {% if list.closed %}
+                    {% if user == user.is_authenticated %}
+                        {% if list.current_winning_bidder %}
+                            <div>Your item was SOLD to {{ list.current_winning_bidder }}</div>
+                        {% else %}
+                            <div> Bidding Closed.</div>
+                        {% endif %}
+                    {% else %}
+                        {%  if list.current_winning_bidder == user %}
+                            <div>Congratulations!!! You have won this auction</div>
+                        {% elif list.current_winning_bidder is None %}
+                            <div>Nobody showed any interest on this item and it has been closed.</div>
+                        {% else %}
+                            <div>An anonymous user has won this auction!</div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+            <h5 class="card-title"> {{list.title}} </h5>
+            <p class="card-text" style="color:gray;"> {{list.details}} </p>
+            <h6>Item price: {{list.price}} </h6>
+
+            <div style="color:red;">
+            {% if list.no_of_bids > 0 %}
+                <p>Top bid: {{ list.cur_price }}, <small>Total bids: </small>{{ list.no_of_bids }}  </p>
+            {% else %}
+                <p>No bid yet.</p>
+            {% endif %}
+            </div>
+            
+            <p><small>Category:</small> {{list.category}} 
+            <br /><small>Posted by: </small> {{ list.user }} |
+            <small style="color:gray;">at: {{list.created}} </small></p>
+        <!--
+            {% if not user.is_authenticated %}
+                <a name="Login" class="btn btn-primary" href="{% url 'login' %}?next={% url 'auctions:index' %}" role="button">Log In to start bid</a>
+            {% else %}
+                <a name="bid" class="btn btn-info" href="{% url 'auctions:listing' list.id %}" role="button">Bid now</a>
+            {% endif %}
+        -->            
+            {% if is_watch %}
+                <a name="bid" class="btn btn-info" href="{% url 'auctions:watchlist' list.id %}" role="button">Remove</a>
+            {% endif %}
+
+
+        {% endif %} 
+        </div>
+    </div>
+</a>
+{% endfor %}
