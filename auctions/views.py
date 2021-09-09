@@ -52,24 +52,10 @@ def create(request):
         return redirect(success_url)
 
 
-"""
-    if request.method == 'POST':
-        # request form and image file
-        form = MainForm(request.POST, request.FILES)
-        # check if the form is valid
-        if form.is_valid():
-            newobj = form.save(commit=False)
-            # logged in user is available on a view func's `request` instance
-            newobj.user = request.user
-            newobj.save()  # safe to save w/ user in tow
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        form = MainForm()
-        return render(request, "auctions/create.html", {'form': form})
-"""
 
 @login_required
 def listing(request, list_id):
+    success_url = reverse_lazy('auctions:index')
     #Get the listitem from models
     list = Listing.objects.get(pk=list_id)
     #Get the bid value from the models from current list
@@ -93,7 +79,7 @@ def listing(request, list_id):
                 'form': bidform
             })
 
-        return HttpResponseRedirect(reverse("listing", args=(list_id,)))
+        return HttpResponseRedirect(success_url)
     else:
         #Get the bidform from froms.models file.
         form = BidForm()

@@ -1,13 +1,15 @@
 {% extends "auctions/layout.html" %}
 
-{% block body %}
+{% block content %}
 
 <h2>Active Listings</h2>
 
 <div class="card mb-3" style="max-width: 100%;">
     <div class="row no-gutters">
         <div class="col-md-4">
-            <img src="{{ list.new_Img.url }}" class="card-img-top" alt="Image">
+            {% if list.content_type %}
+                <img style="width:100%; border:3px solid black;" src="{% url 'auctions:list_picture' list.id %}">
+            {% endif %}
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -37,17 +39,17 @@
                 <p>Posted by {{ list.user }}</p>
                 <br />
                 {% if user in list.watchlistuser.all %}
-                <a name="watchlist" class="btn btn-info" href="{% url 'watchlist' list.id %}" role="button">Remove
+                <a name="watchlist" class="btn btn-info" href="{% url 'auctions:watchlist' list.id %}" role="button">Remove
                     Watchlist</a>
                 {% else %}
-                <a name="watchlist" class="btn btn-info" href="{% url 'watchlist' list.id %}" role="button">Add
+                <a name="watchlist" class="btn btn-info" href="{% url 'auctions:watchlist' list.id %}" role="button">Add
                     Watchlist</a>
                 {% endif %}
 
-                <a name="close" class="btn btn-danger" href="{% url 'closed' list.id %}" role="button">Close</a>
+                <a name="close" class="btn btn-danger" href="{% url 'auctions:closed' list.id %}" role="button">Close</a>
 
                 <hr>
-                <a name="comment" class="btn btn-info" href="{% url 'comment' list.id %}" role="button">Comments</a>
+                <a name="comment" class="btn btn-info" href="{% url 'auctions:comment' list.id %}" role="button">Comments</a>
             </div>
         </div>
     </div>

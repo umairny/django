@@ -37,7 +37,7 @@ class MainForm(ModelForm):
 
     # Convert uploaded File object to a picture
     def save(self, commit=True):
-        instance = super(Listing, self).save(commit=False)
+        instance = super(MainForm, self).save(commit=False)
 
         # We only need to adjust picture if it is a freshly uploaded file
         f = instance.picture   # Make a copy
