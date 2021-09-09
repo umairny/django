@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'wiki.apps.WikiConfig',
     'network.apps.NetworkConfig',
     'auctions.apps.AuctionsConfig',
-
+    'mail.apps.MailConfig',
 ]
 
 MIDDLEWARE = [

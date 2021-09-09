@@ -21,13 +21,8 @@
         <h1 class="display-3">Social Network example.</h1>
         <p class="lead">Where you can post, comment, like and follow.</p>
         <hr class="my-2">
-        <p>Login to continue...   user: new, pw: new123</p>
+        <p><a href="{% url 'login' %}?next={% url 'network:index' %}">Login</a> to continue...</p>
     </div>
-
-
-            <div class="pt-2">
-                <a href="{% url 'login' %}?next={% url 'network:index' %}">Login</a> to explore? 
-            </div>
 
     </div>
 
