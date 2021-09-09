@@ -1,9 +1,8 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -13,7 +12,6 @@ from django.core import serializers
 from django.views import View
 from .models import *
 from .forms import *
-
 
 
 @csrf_exempt
@@ -69,7 +67,7 @@ def profile(request, user_id):
 def following(request):
     user = request.user
     #get the porfile user via user id
-    user = Profile.objects.get(pk=user.id)
+    user = Profile.objects.get(user=user.id)
     
     #Check if the user follow you 
     following = user.follow.all().values_list('user', flat=True)
@@ -95,51 +93,26 @@ def following(request):
 @csrf_exempt
 def edit_profile(request, user_id):
     success_url = reverse_lazy('network:profile', kwargs={'user_id':user_id})
-    #if user edit the form via POST
-    if request.method == "POST":
-        proform = ProfileForm(request.POST, request.FILES or None)
-        userform = UserForm(request.POST)
-        if not proform.is_valid():
-            ctx = {'proform': proform, 'userform': userform}
-            return render(request, success_url, ctx)
-        
-        # Add owner to the model before saving
-        proform = proform.save(commit=False)
-        proform.user = request.user
-        proform.save()
-        return HttpResponseRedirect(success_url)
 
-    #Show the user porfile form for edit
-    userform = UserForm()
-    proform = ProfileForm()
-    return render(request, "network/edit_profile.html", {
-            "proform": proform,
-            "userform": userform
-        })  
-"""
-@csrf_exempt
-class edit_profile(LoginRequiredMixin, View):
-    template_name = 'network/edit_profile.html'
-    success_url = reverse_lazy('network:profile')
-
-    def get(self, request, pk=None):
-        form = ProfileForm()
+    if request.method == "GET":
+        profile = get_object_or_404(Profile, user=request.user)
+        form = ProfileForm(instance=profile)
         ctx = {'form': form}
-        return render(request, self.template_name, ctx)
+        return render(request, "network/edit_profile.html", ctx)
 
-    def post(self, request, pk=None):
-        form = ProfileForm(request.POST, request.FILES or None)
+    if request.method == "POST":
+        profile = get_object_or_404(Profile, user=request.user)
+        form = ProfileForm(request.POST, request.FILES or None, instance=profile)
 
         if not form.is_valid():
             ctx = {'form': form}
-            return render(request, self.template_name, ctx)
+            return render(request, "network/edit_profile.html", ctx)
 
-        # Add owner to the model before saving
-        pic = form.save(commit=False)
-        pic.owner = self.request.user
-        pic.save()
-        return redirect(self.success_url)
-"""
+        profile = form.save(commit=False)
+        profile.save()
+
+        return redirect(success_url)
+
 
 #follow and unfollow button
 @csrf_exempt
@@ -151,10 +124,10 @@ def follow(request, user_id):
     oneprofile = user.id
 
     #User to be followed
-    profile = Profile.objects.get(pk=user_id)
+    profile = Profile.objects.get(user=user_id)
     
     #Toggle the add and remove button
-    if profile.follow.filter(pk=oneprofile).exists():
+    if profile.follow.filter(user=oneprofile).exists():
         profile.follow.remove(oneprofile)
     else:
         profile.follow.add(oneprofile)
@@ -197,13 +170,11 @@ def comment(request, post_id):
 @login_required
 @csrf_exempt
 def like(request, post_id):
-
     #User to be followed
     post = Posts.objects.get(pk=post_id)
     #Send the jsondata
     if request.method == "GET":
         return JsonResponse(post.serialize())
-
     #User current
     user = request.user
     oneprofile = user.id
@@ -219,7 +190,7 @@ def like(request, post_id):
             liked = "Liked"
         
         return JsonResponse({'liked': liked,'total_like': post.like.count(), "status": 201})
-
+"""
 @csrf_exempt
 def login_view(request):
     success_url = reverse_lazy('network:index')
@@ -245,7 +216,7 @@ def logout_view(request):
     logout(request)
     success_url = reverse_lazy('network:index')
     return HttpResponseRedirect(success_url)
-
+"""
 
 def register(request):
     success_url = reverse_lazy('network:index')

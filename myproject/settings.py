@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     #apps
     'wiki.apps.WikiConfig',
     'network.apps.NetworkConfig',
+    'auctions.apps.AuctionsConfig',
+
 ]
 
 MIDDLEWARE = [

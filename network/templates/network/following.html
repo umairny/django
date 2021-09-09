@@ -1,6 +1,6 @@
 {% extends "network/layout.html" %}
 {% load static %}
-{% block body %}
+{% block content %}
 <div class="container">
 <h4 class="alert alert-info mt-2">Posts of your followers:</h4>
     <h5>You have <i class="fa fa-users" aria-hidden="true"></i><strong> {{ follow.count }} follower </strong> <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>  
@@ -11,5 +11,4 @@
     {% include "network/posts.html" %}
 </div>
 
-
-{% endblock body %}
+{% endblock %}

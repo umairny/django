@@ -1,12 +1,12 @@
-from django.db.models import fields
-from django.db.models.fields import CharField
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.forms import ModelForm, Textarea, FileInput, DateField, TextInput, widgets
-from .models import *
+from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput, FileInput
+from .models import Listing, Bid, Comment
 from django import forms
+import re
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from .humanize import naturalsize
 
-class ProfileForm(forms.ModelForm):
+
+class MainForm(ModelForm):
     max_upload_limit = 2 * 1024 * 1024
     max_upload_limit_text = naturalsize(max_upload_limit)
 
@@ -17,16 +17,16 @@ class ProfileForm(forms.ModelForm):
     upload_field_name = 'picture'
 
     class Meta:
-        model = Profile
-        fields = ['full_name', 'location','birth_date', 'picture']
+        model = Listing
+        fields = ('title', 'details', 'price', 'category', 'picture')
         widgets = {
-            'full_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Full Name', 'type':'text'}),
-            'location' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':'your location', 'type':'text'}),
-            'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type':'date', 
-                                            'placeholder':'Select a date'}),
+            'title': TextInput(attrs={'class': 'form-control'}),
+            'details': Textarea(attrs={'class': 'form-control'}),
+            'price': NumberInput(attrs={'class': 'form-control'}),
+            'category': Select(attrs={'class': 'form-control'}),
         }
 
-    # Validate the size of the picture
+        # Validate the size of the picture
     def clean(self):
         cleaned_data = super().clean()
         pic = cleaned_data.get('picture')
@@ -37,7 +37,7 @@ class ProfileForm(forms.ModelForm):
 
     # Convert uploaded File object to a picture
     def save(self, commit=True):
-        instance = super(ProfileForm, self).save(commit=False)
+        instance = super(Listing, self).save(commit=False)
 
         # We only need to adjust picture if it is a freshly uploaded file
         f = instance.picture   # Make a copy
@@ -51,11 +51,22 @@ class ProfileForm(forms.ModelForm):
 
         return instance
 
-class PostForm(forms.ModelForm):
+class CommentForm(ModelForm):
     class Meta:
-        model = Posts
-        fields = ('post',)
+        model = Comment
+        fields = ('comment',)
         widgets = {
-            'post': Textarea(attrs={'class': 'form-control ', 'rows' :'2',
-            'placeholder': 'your text goes here'})
+            'comment': Textarea(attrs={'class': 'form-control',
+            'placeholder': 'comment here'})
         }
+
+class BidForm(ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['bid']
+        widgets = {
+            'bid': NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your Bid here.'})
+        }
+

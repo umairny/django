@@ -1,0 +1,55 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<h2>Active Listings</h2>
+
+<div class="card mb-3" style="max-width: 100%;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="{{ list.new_Img.url }}" class="card-img-top" alt="Image">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h3 class="card-title"> {{list.title}} </h3>
+                <p class="card-text">
+                <h5>Details:</h5> {{list.details}} </p>
+                <h6> Price: {{list.price}} </h6>
+                <h6>Cur bid: {{ list.cur_price }} </h6>
+                <P>Total no of bids {{ list.no_of_bids }}
+                <h6>Category: {{list.category}} </h6>
+                <p>Created date: {{list.created}} </p>
+
+
+                {% if message %}
+                <div>{{ message }}</div>
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Your bid">
+                </form>
+
+
+                <p>Posted by {{ list.user }}</p>
+                <br />
+                {% if user in list.watchlistuser.all %}
+                <a name="watchlist" class="btn btn-info" href="{% url 'watchlist' list.id %}" role="button">Remove
+                    Watchlist</a>
+                {% else %}
+                <a name="watchlist" class="btn btn-info" href="{% url 'watchlist' list.id %}" role="button">Add
+                    Watchlist</a>
+                {% endif %}
+
+                <a name="close" class="btn btn-danger" href="{% url 'closed' list.id %}" role="button">Close</a>
+
+                <hr>
+                <a name="comment" class="btn btn-info" href="{% url 'comment' list.id %}" role="button">Comments</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+    <div class="container">
+    <div>
+        <h1 class="display-5">Login</h1>
+        <hr class="my-2">
+        <p>Login to continue...  </p>
+        <h6 style="text-align:center;" > user: mike, pw: mike123 or user: harry, pw: harry123</h6>
+    </div>
+
+    <div class="mac">
+            <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" >{{ field.html_name.upper }}</lable>
+                        <input class="form-control mt-1" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="{{ field.html_name }}" placeholder="{{ field.html_name }}" required /> 
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+
+            <input class="btn btn-primary" type="submit" value="Login">
+            <input type="hidden" name="next" value="{{ next }}" />
+
+            {% if form.errors %}
+                <small style="color:red;">Please enter a correct username and/or password.</small>
+            {% endif %}
+
+        </form>
+    </div>
+    </div>
+{% endblock %}

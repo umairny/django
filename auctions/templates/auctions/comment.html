@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="card mb-3" style="max-width: 100%;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+           <img src="{{ list.new_Img.url }}" class="card-img-top" alt="Image">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h3 class="card-title"> {{list.title}} </h3>
+                <p class="card-text"><h5>Details:</h5> {{list.details}} </p>
+                <h6>Catagory: {{list.category}} </h6>
+            </div>
+        </div>
+    </div>
+</div>    
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                {% csrf_token %}
+                    {{ comform.as_p }}
+            </div>
+            <input class="btn btn-primary" type="submit" value="Your comment">
+        </form>
+    <hr>
+    <h3 style="color:green;">Comments</h3>
+    <div class="comment">
+    {% for comment in list.comments.all %}
+        <div class="row each-comment">
+            <div class="col">
+                <h6><strong style="color: black;">{{ comment.user }}</strong> commented:</h6>
+                <p> {{ comment.comment }}</p>
+                <p class="small" style="color:gray;"> {{ comment.com_time }} </p>
+            </div>
+        </div>
+    {% endfor %}
+
+
+    </div>
+
+{% endblock %}

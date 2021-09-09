@@ -9,9 +9,10 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # Keep
     path('', include('home.urls')),
 
-
     path('wiki/', include('wiki.urls')),
     path('network/', include('network.urls')),
+    path('auctions/', include('auctions.urls')),
+
 ]
 
 # Serve the static HTML

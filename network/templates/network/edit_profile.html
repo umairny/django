@@ -1,12 +1,11 @@
 {% extends "network/layout.html" %}
 {% load static %}
 
-{% block body %}
+{% block content %}
 <div class="row">
-<div class="alert alert-warning col-12 mt-2">If you have any of these settings already! This change will effect in your profile.</div>
+<div class="alert alert-warning col-12 mt-2">The change will update your profile.</div>
 <form method="POST" id="upload_form" enctype="multipart/form-data">
-    {{ userform.as_p }}
-    {{ proform.as_p }}
+    {{ form.as_p }}
     <input class="btn btn-info" type="submit" value="Save">
     <input class="btn btn-info" type="submit" value="Cancel" onclick="window.location.href='{% url 'network:profile' user.id %}';return false;">
 </form>
@@ -24,4 +23,4 @@ $("#upload_form").submit(function() {
   }
 });
 </script>
-{% endblock body %}
+{% endblock %}
