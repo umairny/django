@@ -14,7 +14,6 @@ from .models import *
 from .forms import *
 
 
-@csrf_exempt
 def index(request):
     success_url = reverse_lazy('network:index')
     if request.method == "POST":
@@ -43,7 +42,6 @@ def index(request):
 
 #Show the user profile
 @login_required
-@csrf_exempt
 def profile(request, user_id):
     user = request.user
     curuser = get_object_or_404(Profile, user=user)
@@ -63,7 +61,6 @@ def profile(request, user_id):
 
 #Show the users who currently follows you
 @login_required
-@csrf_exempt
 def following(request):
     user = request.user
     #get the porfile user via user id
@@ -90,7 +87,6 @@ def following(request):
 
 # To complete the user its profile if user want
 @login_required
-@csrf_exempt
 def edit_profile(request, user_id):
     success_url = reverse_lazy('network:profile', kwargs={'user_id':user_id})
 
@@ -115,7 +111,6 @@ def edit_profile(request, user_id):
 
 
 #follow and unfollow button
-@csrf_exempt
 def follow(request, user_id):
     success_url = reverse_lazy('network:profile', kwargs={'user_id': user_id})
 
@@ -145,7 +140,7 @@ def posts(request):
     return render(request, "network/index.html", {
         "page_obj":page_obj,
     })
-
+@login_required
 @csrf_exempt
 def edit(request, post_id):
     post = Posts.objects.get(id=post_id)
@@ -156,6 +151,7 @@ def edit(request, post_id):
         post.save()
         return HttpResponse(status=204)
 
+@login_required
 @csrf_exempt
 def comment(request, post_id):
     post = Posts.objects.get(id=post_id)

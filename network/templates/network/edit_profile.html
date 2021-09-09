@@ -5,6 +5,7 @@
 <div class="row">
 <div class="alert alert-warning col-12 mt-2">The change will update your profile.</div>
 <form method="POST" id="upload_form" enctype="multipart/form-data">
+    {% csrf_token %}
     {{ form.as_p }}
     <input class="btn btn-info" type="submit" value="Save">
     <input class="btn btn-info" type="submit" value="Cancel" onclick="window.location.href='{% url 'network:profile' user.id %}';return false;">
