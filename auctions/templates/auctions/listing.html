@@ -50,6 +50,9 @@
                 {% endif %}
                 <hr>
                 <a name="comment" class="btn btn-info" href="{% url 'auctions:comment' list.id %}" role="button">Comments</a>
+            {% else %}
+                <h1 style="color:red;" class="display-3">Closed</h1>
+                <p>An anonymous user has won this auction!</p>
             {% endif %}
 
             </div>
