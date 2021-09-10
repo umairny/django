@@ -7,16 +7,24 @@
 
     <div class="card-body">
              {% if list.closed %}
-                    {% if user == user.is_authenticated %}
+                    {% if request.user == list.user %}
                         {% if list.current_winning_bidder %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
                             <div>Your item was SOLD to {{ list.current_winning_bidder }}</div>
                         {% else %}
-                            <div> Bidding Closed.</div>
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
+                            <div>Bidding Closed. Nobody showed any interest.</div>
                         {% endif %}
                     {% else %}
                         {%  if list.current_winning_bidder == user %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">You Won</h1></div>
                             <div>Congratulations!!! You have won this auction</div>
                         {% elif list.current_winning_bidder is None %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
                             <div>Nobody showed any interest on this item and it has been closed.</div>
                         {% else %}
                             <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
@@ -27,11 +35,11 @@
                 {% else %}
             <h5 class="card-title"> {{list.title}} </h5>
             <p class="card-text" style="color:gray;"> {{list.details}} </p>
-            <h6>Item price: {{list.price}} </h6>
+            <h6>Item price: &#36;{{list.price}} </h6>
 
             <div style="color:red;">
             {% if list.no_of_bids > 0 %}
-                <p>Top bid: {{ list.cur_price }}, <small>Total bids: </small>{{ list.no_of_bids }}  </p>
+                <p>Top bid: &#36;{{ list.cur_price }}, <small>Total bids: </small>{{ list.no_of_bids }}  </p>
             {% else %}
                 <p>No bid yet.</p>
             {% endif %}

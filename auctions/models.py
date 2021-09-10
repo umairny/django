@@ -42,7 +42,7 @@ class Listing(models.Model):
 
     def current_winning_bidder(self):
         return self.bid_list.get(bid=self.cur_price()).user if self.no_of_bids() > 0 else None
-
+ 
     def cur_price(self):
         return max([bid.bid for bid in self.bid_list.all()]+[self.price])
 

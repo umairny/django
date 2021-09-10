@@ -1,10 +1,6 @@
 {% extends "wiki/layout.html" %}
 
-{% block title %}
-    Edit
-{% endblock %}
-
-{% block body %}
+{% block content %}
     <form method="POST">
         {% csrf_token %}
         <h3>Title: <span style="color:red"> {{title}} </span></h3>

@@ -1,16 +1,12 @@
 {% extends "wiki/layout.html" %}
 
-{% block title %}
-Wiki
-{% endblock %}
 
-{% block body %}
-<h1 class="mb-3">All Pages</h1>
+{% block content %}
+<h3 class="mb-3">All Pages</h3>
 <hr />
 <ul class="list-group">
     {% for entry in entries %}
-        <li class="list-group-item"><a href="wiki/{{entry}}"> {{ entry }} </a></li>
+        <li class="list-group-item mb-1 col-md-5 col-xs-12"><a href="wiki/{{entry}}"> {{ entry }} </a></li>
     {% endfor %}
 </ul>
-
 {% endblock %}

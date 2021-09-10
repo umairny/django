@@ -1,10 +1,7 @@
 {% extends "wiki/layout.html" %}
 
-{% block title %}
-Add New page
-{% endblock %}
 
-{% block body %}
+{% block content %}
   <form method="post">
     {% csrf_token %}
       <h3>Create new page:</h3>

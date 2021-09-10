@@ -1,40 +1,43 @@
+{% extends 'base_template.html' %}
 {% load static %}
 
-<!DOCTYPE html>
+{% block title %}
+Wiki
+{% endblock  %}
 
-<html lang="en">
-
-    <head>
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{% block head %}
         <link href="{% static 'wiki/styles.css' %}" rel="stylesheet">
-    </head>
+{% endblock  %}
 
-    <body class='body'>
-        <div class="row col-lg-12 col-md-12">
-            <div class="sidebar col-lg-2 col-md-3 bg-dark text-white">
-                <h2 class="p-3">Wiki</h2>
-                <div class="nav flex-column mb-5">
-                    <a class="nav-link" href="{% url 'wiki:index' %}">Home</a>
-                    <a class="nav-link" href="{% url 'wiki:add_page' %}">Create New Page</a>
-                    <a class="nav-link" href="{% url 'wiki:random' %}">Random Page</a>
-                </div>
- 
-                <form class="d-flex" action="{% url 'wiki:search' %}">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search">
-                    <button type="submit" name="Search" class="btn btn-outline-success">Search</button>
-                </form>
+{% block navbar %}
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark mb-2">
+    <!-- Brand -->
+    <a class="navbar-brand" href="#">Wiki</a>
 
-                {% block nav %}
-                {% endblock %}
-            </div>
-            <div class="main col-lg-10 col-md-9">
-                {% block body %}
-                {% endblock %}
-            </div>
-        </div>
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    </body>
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'wiki:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'wiki:add_page' %}">Create New Page</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'wiki:random' %}">Random Page</a>
+        </li>
+        </ul>
 
-</html>
+    </div>
+        <form class="d-flex" action="{% url 'wiki:search' %}">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search">
+            <button type="submit" name="Search" class="btn btn-outline-success">Search</button>
+        </form>
+    </nav>
+                    
+ {% endblock %}

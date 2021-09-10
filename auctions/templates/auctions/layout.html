@@ -9,10 +9,10 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <a class="navbar-brand" href="{% url 'auctions:index' %}">Auction &amp; Bid</a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'auctions:index' %}">Active items</a>
-            </li>
             {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'auctions:index' %}">All items</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'auctions:watchlistitems' %}">Watchlist <sup> {{ wl }}</sup> </a>
             </li>
@@ -26,6 +26,9 @@
                 <a class="nav-link" href="{% url 'logout' %}?next={% url 'auctions:index' %}">Log Out</a>
             </li>
             {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'auctions:index' %}">Active items</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}?next={% url 'auctions:index' %}">Log In</a>
             </li>

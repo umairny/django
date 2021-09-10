@@ -13,7 +13,7 @@
             <div class="card-body">
                 <p class="card-text">Details: {{list.details}} </p>
                 <hr />
-                <p>Item price: {{list.price}} <span style="color:red; float:right;">Top bid: {{ list.cur_price }} <br /> Total bids: {{ list.no_of_bids }}</span> </p>
+                <p>Item price: &#36;{{list.price}} <span style="color:red; float:right;">Top bid: &#36;{{ list.cur_price }} <br /> Total bids: {{ list.no_of_bids }}</span> </p>
                 <br />
                 <hr />
                                 
@@ -51,8 +51,31 @@
                 <hr>
                 <a name="comment" class="btn btn-info" href="{% url 'auctions:comment' list.id %}" role="button">Comments</a>
             {% else %}
-                <h1 style="color:red;" class="display-3">Closed</h1>
-                <p>An anonymous user has won this auction!</p>
+                    {% if request.user == list.user %}
+                        {% if list.current_winning_bidder %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
+                            <h4>Your item was SOLD to {{ list.current_winning_bidder }} in &#36;{{ list.cur_price }}</h4>
+                        {% else %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
+                            <div>Bidding Closed. Sorry <strong> {{ list.user }} </strong> Nobody showed any interest.</div>
+                        {% endif %}
+                    {% else %}
+                        {%  if list.current_winning_bidder == user %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">You Won</h1></div>
+                            <h4>Congratulations!!! You have won this auction. In &#36;{{ list.cur_price }}</h4>
+                        {% elif list.current_winning_bidder is None %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
+                            <div>Nobody showed any interest on this item and it has been closed.</div>
+                        {% else %}
+                            <div style="position:absolute; top:30%; left:20%; border: 2px solid red;
+                            border-radius: 5px; background: white; opacity: 0.7;"><h1 class="p-2">Closed</h1></div>
+                            <div>An anonymous user has won this auction!</div>
+                        {% endif %}
+                    {% endif %}
             {% endif %}
 
             </div>

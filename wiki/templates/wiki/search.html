@@ -1,12 +1,8 @@
 {% extends "wiki/layout.html" %}
 
-{% block title %}
-    Search Page
-{% endblock %}
-
-{% block body %}
+{% block content %}
 <h1>Search results</h1>
-
+<hr />
 <ul style="list-style: none;">
     {% for entry in entries %}
         <li><a href="{% url 'wiki:entry' entry %}">{{ entry }}</a></li>
