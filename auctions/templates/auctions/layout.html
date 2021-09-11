@@ -3,7 +3,11 @@
 {% block title %}Auction{% endblock  %}
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-2" >
-        <a class="navbar-brand" href="{% url 'auctions:index' %}">Auction &amp; Bid</a>
+        {% if user.is_authenticated %}
+            <a class="navbar-brand" href="#">Hi, <strong>{{ user.username }}</strong></a>
+        {% else %}
+            <a class="navbar-brand" href="{% url 'auctions:index' %}">My Auction</a>
+        {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,9 +39,6 @@
             </li>
             {% endif %}
         </ul>
-        {% if user.is_authenticated %}
-            <a class="navbar-brand" href="#">Hi, <strong>{{ user.username }}</strong></a>
-        {% endif %}
     </nav>
     {% endblock %}
 
