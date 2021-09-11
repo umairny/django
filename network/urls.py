@@ -19,6 +19,10 @@ urlpatterns = [
     # extra routes
     path("profile/<int:user_id>", views.profile, name="profile"),
     path("edit_profile/<int:user_id>", views.edit_profile, name="edit_profile"),
+    path("profile/edit/<int:post_id>", views.edit, name="edit"),
+    path("profile/comment/<int:post_id>", views.comment, name="comment"),
+    path("profile/like/<int:post_id>", views.like, name="like"),
+
 
     #Picture urls
     path('prof_picture/<int:pk>', views.stream_file, name='prof_picture'),

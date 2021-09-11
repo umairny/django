@@ -3,11 +3,13 @@
 
 {% block content %}
 <div class="mt-4">
-    <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
-    <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
-    <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
-    <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}?next={% url 'mail:index' %}">Log Out</a>
+    <div id='mailNav'>
+        <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
+        <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
+        <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
+        <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}?next={% url 'mail:index' %}">Log Out</a>
+    </div>
     <hr>
 
     <div id="emails-view"></div>
@@ -36,4 +38,26 @@
 
 {% block script %}
     <script src="{% static 'mail/inbox.js' %}"></script>
+    <script>
+        // Get the container element
+        var btnContainer = document.getElementById("mailNav");
+
+        // Get all buttons with class="btn" inside the container
+        var btns = btnContainer.getElementsByClassName("btn");
+
+        // Loop through the buttons and add the active class to the current/clicked button
+        for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+
+            // If there's no active class
+            if (current.length > 0) {
+            current[0].className = current[0].className.replace(" active", "");
+            }
+            
+            // Add the active class to the current/clicked button
+            this.className += " active";
+        });
+        }
+    </script>
 {% endblock %}

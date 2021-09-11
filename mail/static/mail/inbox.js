@@ -23,8 +23,9 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
+  
   document.querySelector('#emails-view').innerHTML = `<h5 class="alert alert-info">${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h5>`;
- 
+
   load(mailbox);
 }
 
@@ -97,9 +98,9 @@ function add_email(post, new_email, mailbox) {
   const content = document.createElement('div');
   // display the emails
   if (mailbox === 'sent') {
-    content.innerHTML = `<strong>sent to ${post.recipients}</strong> || ${post.subject} <i> || ${post.body.slice(0, 25)}</i><p style="float:right;"><small>${post.timestamp}</small></p>`;
+    content.innerHTML = `<strong class="pr-3"><small>Sent to </small>${post.recipients}</strong> Sub: ${post.subject} <i class="pl-3"> msg: ${post.body.slice(0, 25)}</i><span class="pl-3"><small>${post.timestamp}</small></span>`;
   } else {
-  content.innerHTML = `<strong>${post.sender}</strong> || ${post.subject} <i> || ${post.body.slice(0, 25)}</i><p style="float:right;"><small>${post.timestamp}</small></p>`;
+  content.innerHTML = `<strong class="pr-3"><small>From: </small>${post.sender}</strong> Sub: ${post.subject} <i class="pl-3"> msg: ${post.body.slice(0, 25)}</i><span class="pl-3"><small>${post.timestamp}</small></span>`;
   }
 
     //style the emails view

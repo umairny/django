@@ -3,12 +3,12 @@
 {% block title %}Social Network{% endblock  %}
     {% block navbar %} 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+        <a class="navbar-brand" href="{% url 'network:index' %}">My Social Network</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="{% url 'network:index' %}">My Social Network</a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'network:index' %}">All Posts</a>

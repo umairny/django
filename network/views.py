@@ -42,8 +42,6 @@ def index(request):
 
 #Show the user profile
 def profile(request, user_id):
-    user = request.user
-    curuser = get_object_or_404(Profile, user=user)
     profile = get_object_or_404(Profile, user=user_id)
     posts = Posts.objects.filter(user=user_id)
 
@@ -55,7 +53,6 @@ def profile(request, user_id):
     return render(request, "network/profile.html", {
         "profile": profile,
         "page_obj": page_obj,
-        "curuser": curuser
     })  
 
 #Show the users who currently follows you
