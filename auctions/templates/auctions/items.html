@@ -34,7 +34,7 @@
                     {% endif %}
                 {% else %}
             <h5 class="card-title"> {{list.title}} </h5>
-            <p class="card-text" style="color:gray;"> {{list.details}} </p>
+            <p class="card-text" style="color:gray;"> {{ list.details|truncatewords:"7" }} </p>
             <h6>Item price: &#36;{{list.price}} </h6>
 
             <div style="color:red;">
