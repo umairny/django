@@ -115,6 +115,7 @@ def comment(request, list_id):
 
 @login_required
 def watchlist(request, list_id):
+    success_url = reverse_lazy('auctions:watchlistitems')
     #cheching the user if authentic
     assert request.user.is_authenticated
     user = request.user
@@ -124,8 +125,10 @@ def watchlist(request, list_id):
     #Toggel if watchlist or nowt
     if user.watchlist.filter(pk=list_id).exists():
         user.watchlist.remove(listing)
+        return redirect(success_url)
     else:
         user.watchlist.add(listing)
+        return redirect(success_url)
     
     return render(request, "auctions/index.html", {
         'listing': request.user.watchlist.all(),
