@@ -23,7 +23,6 @@ urlpatterns = [
     path("profile/comment/<int:post_id>", views.comment, name="comment"),
     path("profile/like/<int:post_id>", views.like, name="like"),
 
-
     #Picture urls
     path('prof_picture/<int:pk>', views.stream_file, name='prof_picture'),
     

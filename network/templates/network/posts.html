@@ -35,9 +35,8 @@
                     </button>
                     <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                     <span id="total_like{{ post.id }}">{{post.total_likes}}</span>
-
-
                    
+
                     {% if user == post.user %}
                     <button id="edit-btn-{{ post.id }}" onclick="edit('{{ post.id }}')" class="btn btn-light">Edit</button>
                     <button id="save{{post.id}}" class="btn btn-light" style="display: none;">Save Edit</button>
@@ -47,7 +46,6 @@
                         <button id="combtn{{post.id}}" onclick="comm('{{ post.id }}')" class="btn btn-light ml-5">Comment</button>
                         <button id="reply{{post.id}}" class="btn btn-light" style="display: none;">Reply Comment</button>
                     {% endif %}
-
 
                     <p style="float:right;">Posted: <small>{{post.pub_date}}</small></p>
                 </div>

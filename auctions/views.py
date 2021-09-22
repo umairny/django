@@ -130,11 +130,6 @@ def watchlist(request, list_id):
         user.watchlist.add(listing)
         return redirect(success_url)
     
-    return render(request, "auctions/index.html", {
-        'listing': request.user.watchlist.all(),
-        'title': "Watchlist Items",
-        'is_watch': request.user.watchlist.filter(pk=list_id).exists()
-    })
 
 @login_required
 def watchlistitems(request):
