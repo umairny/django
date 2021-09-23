@@ -27,12 +27,13 @@
             {% if user == profile.user %}
             <a href="{% url 'network:edit_profile' profile.user.id %}" class="card-link">Edit Profile</a>
             {% else %}
-            {% if curuser in profile.follow.all %}
-            <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
+            {% if ctx %}
+                <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Unfollow</a>
             {% else %}
-            <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
+                <a href="{% url 'network:follow' profile.user.id %}" class="btn btn-info" name="follow">Follow</a>
             {% endif %}
             {% endif %}
+            
         </div>
     </div>
 </div>

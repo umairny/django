@@ -44,6 +44,7 @@ def index(request):
 def profile(request, user_id):
     profile = get_object_or_404(Profile, user=user_id)
     posts = Posts.objects.filter(user=user_id)
+    ctx = profile.follow.filter(user=request.user).exists()
 
     #paginator 
     paginator = Paginator(posts, 10) # Show 10 contacts per page.
@@ -53,6 +54,7 @@ def profile(request, user_id):
     return render(request, "network/profile.html", {
         "profile": profile,
         "page_obj": page_obj,
+        "ctx": ctx
     })  
 
 #Show the users who currently follows you
@@ -74,7 +76,6 @@ def following(request):
     paginator = Paginator(posts, 10) # Show 10 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
 
     return render(request, "network/following.html", {
         "follow": follow,
@@ -124,8 +125,8 @@ def follow(request, user_id):
         profile.follow.remove(oneprofile)
     else:
         profile.follow.add(oneprofile)
-    
-    return HttpResponseRedirect(success_url)
+
+    return redirect(success_url)
 
 
 def posts(request):
