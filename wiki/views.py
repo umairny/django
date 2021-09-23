@@ -4,7 +4,6 @@ from . import util
 from random import randint
 import re
 
-
 from markdown2 import Markdown, markdown
 from django.urls import reverse_lazy
 
