@@ -5,7 +5,8 @@ from random import randint
 import re
 
 from markdown2 import Markdown, markdown
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
 
 markdowner = Markdown()
 
@@ -21,38 +22,6 @@ def index(request):
     return render(request, "wiki/index.html", {
         "entries": util.list_entries()
     })
-
-
-# Search logic
-def search(request):
-    entries = util.list_entries()
-    query = request.GET.get('q').lower()
-    entry = [item.lower() for item in entries]
-    searchlist = []
-    for i in entry:
-        if re.search(query, i):
-            searchlist.append(i)
-    #print(len(searchlist))
-    
-    if query:
-        print(entry)
-        if len(searchlist) == 0:
-            return render(request, "wiki/error.html", {"message": "The search result not found Try again"})
-        if len(searchlist) == 1:
-            for pages in searchlist:
-                page = util.get_entry(pages)
-                page_converted = markdowner.convert(page)
-                context = {
-                    'page': page_converted,
-                    'title': query,
-                    }
-                return render(request, "wiki/sing_search.html", context)
-        if len(searchlist) > 1:
-            #print(searchlist)
-            return render(request, "wiki/search.html", {"entries": searchlist})
-    else:
-        return render(request, "wiki/error.html", {"message": "Type some thing in search"})
-
 # Entry page 
 def entry(request, title):
     entries = util.list_entries()
@@ -66,6 +35,77 @@ def entry(request, title):
         return render(request, "wiki/entry.html", context)
     else:
         return render(request, "wiki/error.html", {"message": "The requested page was not found."})
+
+def search(request):
+    entries = util.list_entries()
+    query = request.GET.get('q').lower()
+    entry = [item.lower() for item in entries]
+
+    if query in entry:
+        page = util.get_entry(query)
+        page_converted = markdowner.convert(page)
+        context = {
+                'page': page_converted,
+                'title': query,
+                }
+        return render(request, "wiki/sing_search.html", context)
+    else:
+        subStringEntries = []
+        for i in entry:
+            if query in i:
+                subStringEntries.append(i)
+
+        return render(request, "wiki/search.html", {
+        "entries": subStringEntries,
+    })
+
+def sing_search(request, title):
+    entries = util.list_entries()
+    entry = [item.lower() for item in entries]
+
+    if title in entry:
+        page = util.get_entry(title)
+        page_converted = markdowner.convert(page)
+        context = {
+            'page': page_converted,
+            'title': title,
+        }
+        return render(request, "wiki/sing_search.html", context)
+
+# Search logic
+"""
+def search(request):
+    entries = util.list_entries()
+    query = request.GET.get('q').lower()
+    entry = [item.lower() for item in entries]
+    searchlist = []
+    for i in entry:
+        if re.search(query, i):
+            searchlist.append(i)
+    #print(len(searchlist))
+    
+    if query:
+        #print(entry)
+        if query in entry:
+            page = util.get_entry(query)
+            page_converted = markdowner.convert(page)
+            context = {
+                'page': page_converted,
+                'title': query,
+                }
+            return render(request, "wiki/sing_search.html", context)
+        
+        if len(searchlist) > 1:
+            return render(request, "wiki/search.html", {"searchlist": searchlist})
+        
+
+        if len(searchlist) <= 0:
+            return render(request, 'wiki/error.html', {'message': 'The search result not found Try again'})
+
+    else:
+        return render(request, "wiki/error.html", {"message": "Type some thing in search"})
+"""
+
 
 #Creat New page entry
 def add_page(request):
