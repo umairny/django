@@ -37,40 +37,15 @@ def entry(request, title):
         return render(request, "wiki/error.html", {"message": "The requested page was not found."})
 
 def search(request):
-    entries = util.list_entries()
-    query = request.GET.get('q').lower()
-    entry = [item.lower() for item in entries]
-
-    if query in entry:
-        page = util.get_entry(query)
-        page_converted = markdowner.convert(page)
-        context = {
-                'page': page_converted,
-                'title': query,
-                }
-        return render(request, "wiki/sing_search.html", context)
+    entry_list = util.list_entries()
+    query = request.GET.get("q", "")
+    if query in entry_list:
+        return redirect(entry, query)
     else:
-        subStringEntries = []
-        for i in entry:
-            if query in i:
-                subStringEntries.append(i)
-
-        return render(request, "wiki/search.html", {
-        "entries": subStringEntries,
-    })
-
-def sing_search(request, title):
-    entries = util.list_entries()
-    entry = [item.lower() for item in entries]
-
-    if title in entry:
-        page = util.get_entry(title)
-        page_converted = markdowner.convert(page)
-        context = {
-            'page': page_converted,
-            'title': title,
-        }
-        return render(request, "wiki/sing_search.html", context)
+        results = [entry for entry in entry_list if query.lower() in entry.lower()]
+        return render(request, "wiki/index.html", {
+        "entries": results
+        })
 
 # Search logic
 """
