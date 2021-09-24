@@ -5,7 +5,7 @@
 <hr />
 <ul style="list-style: none;">
     {% for entry in entries %}
-        <li><a href="{% url 'wiki:entry' entry %}">{{ entry }}</a></li>
+        <li class="list-group-item mb-1 col-md-5 col-xs-12"><a href="wiki/{{entry}}"> {{ entry }} </a></li>
     {% endfor %}
 </ul>
 

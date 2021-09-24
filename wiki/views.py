@@ -29,32 +29,27 @@ def search(request):
     query = request.GET.get('q').lower()
     entry = [item.lower() for item in entries]
     searchlist = []
-
+    for i in entry:
+        if re.search(query, i):
+            searchlist.append(i)
+    #print(len(searchlist))
+    
     if query:
-
-        if query in entry:
-            page = util.get_entry(query)
-            page_converted = markdowner.convert(page)
-            context = {
-                'page': page_converted,
-                'title': query,
-                }
-            return render(request, "wiki/sing_search.html", context)
-
-        for i in entry:
-            if re.search(query, i):
-                searchlist.append(i)
-                print(searchlist)
-
-        for i in entries:
-            if re.search(query, i.lower()):
-                searchlist.append(i)
-                print(searchlist)
-                return render(request, "wiki/search.html", {
-                    "entries": searchlist
-                })
-        else:
+        print(entry)
+        if len(searchlist) == 0:
             return render(request, "wiki/error.html", {"message": "The search result not found Try again"})
+        if len(searchlist) == 1:
+            for pages in searchlist:
+                page = util.get_entry(pages)
+                page_converted = markdowner.convert(page)
+                context = {
+                    'page': page_converted,
+                    'title': query,
+                    }
+                return render(request, "wiki/sing_search.html", context)
+        if len(searchlist) > 1:
+            #print(searchlist)
+            return render(request, "wiki/search.html", {"entries": searchlist})
     else:
         return render(request, "wiki/error.html", {"message": "Type some thing in search"})
 
