@@ -40,7 +40,7 @@ def search(request):
     entry_list = util.list_entries()
     query = request.GET.get("q", "")
     if query in entry_list:
-        return redirect(entry, query)
+        return redirect('wiki:entry', query)
     else:
         results = [entry for entry in entry_list if query.lower() in entry.lower()]
         return render(request, "wiki/index.html", {
